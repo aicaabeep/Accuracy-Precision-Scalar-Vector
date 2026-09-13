@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Accuracy, Precision, Scalar &amp; Vector | Physics Term 1</title>
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#0e1726;
+    color:#eee6d2;
+    line-height:1.55;
+}
+header{
+    background:
+      linear-gradient(135deg,rgba(211,168,54,.07) 0 12%,transparent 12% 50%,rgba(182,47,47,.06) 50% 62%,transparent 62%),
+      #173b68;
+    background-size:42px 42px;
+    color:#f4ead2;
+    padding:32px 8% 27px;
+    border-bottom:4px solid #b62f2f;
+    position:relative;
+    overflow:hidden;
+}
+header:before{
+    content:"";
+    position:absolute;
+    width:150px;height:150px;
+    right:-45px;bottom:-85px;
+    border:2px solid rgba(232,193,73,.12);
+    border-radius:50%;
+    box-shadow:0 0 0 14px rgba(232,193,73,.04),0 0 0 28px rgba(232,193,73,.025);
+}
+header h1{margin:0 0 7px;font-size:clamp(28px,4vw,36px);letter-spacing:.4px;max-width:760px;position:relative;z-index:1}
+header p{margin:3px 0;font-size:14px;position:relative;z-index:1}
+.topic-tag{
+    display:inline-block;
+    margin-bottom:10px;
+    padding:4px 9px;
+    border:1px solid rgba(232,193,73,.45);
+    color:#e8c149;
+    font-size:11px;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+    background:rgba(9,18,31,.28);
+}
+main{width:84%;max-width:1050px;margin:35px auto 60px}
+.intro{
+    background:#182b45;
+    border:1px solid #304866;
+    border-left:5px solid #d0a637;
+    padding:16px 18px;
+    margin-bottom:30px;
+    color:#e8dfcb;
+    box-shadow:0 7px 20px rgba(0,0,0,.12);
+}
+.intro p{margin:0}
+h2{
+    color:#dfb846;
+    border-bottom:2px solid #7f2929;
+    padding-bottom:7px;
+    margin-top:35px;
+    letter-spacing:.3px;
+}
+.topic{
+    background:#192b42;
+    border:1px solid #304866;
+    border-left:5px solid #b52e2e;
+    padding:20px;
+    margin:15px 0;
+    transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.topic:hover{
+    transform:translateY(-2px);
+    border-color:#486486;
+    box-shadow:0 8px 20px rgba(0,0,0,.16);
+}
+.topic h3{color:#d94a4a;margin-top:0;margin-bottom:7px}
+.formula{
+    background:#111d30;
+    border:1px solid #806a2e;
+    color:#f0c84f;
+    padding:14px;
+    margin:12px 0;
+    text-align:center;
+    font-size:21px;
+    font-family:Georgia,serif;
+    border-radius:3px;
+    box-shadow:inset 0 0 18px rgba(211,168,54,.035);
+}
+.note{color:#bdb7a9;font-size:14px}
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#182b45;
+    margin-top:15px;
+    overflow:hidden;
+}
+th,td{border:1px solid #304866;padding:10px;text-align:left}
+th{background:#173b68;color:#e9c451}
+td{color:#ddd5c4}
+.quiz{
+    background:linear-gradient(145deg,#182b45,#15253b);
+    border:1px solid #3a506b;
+    border-top:4px solid #d0a637;
+    padding:22px;
+    margin-top:35px;
+    box-shadow:0 10px 24px rgba(0,0,0,.16);
+}
+.quiz h2{margin-top:0}
+.quiz-intro{color:#bdb7a9;margin-top:-3px}
+.question{
+    margin:22px 0;
+    padding:16px;
+    border:1px solid #2d4562;
+    background:rgba(10,20,34,.28);
+    border-radius:4px;
+}
+.question-title{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.question-number{
+    min-width:27px;height:27px;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:#b52e2e;color:#fff0df;
+    font-weight:bold;font-size:13px;
+    border-radius:50%;
+}
+.question strong{font-size:15px}
+label{
+    display:block;
+    margin:8px 0;
+    padding:9px 11px;
+    color:#d7d0c0;
+    border:1px solid transparent;
+    border-radius:3px;
+    cursor:pointer;
+    transition:background .15s ease,border-color .15s ease;
+}
+label:hover{background:rgba(211,168,54,.07);border-color:#425a75}
+label input{accent-color:#b52e2e;margin-right:7px}
+.question.correct{border-color:#557b5b}
+.question.incorrect{border-color:#874343}
+.feedback{display:none;margin-top:10px;font-size:13px;padding:8px 10px;border-left:3px solid #d0a637;background:rgba(0,0,0,.14)}
+.question.correct .feedback{display:block;color:#b9d6bd;border-left-color:#6d9a70}
+.question.incorrect .feedback{display:block;color:#e0b7b1;border-left-color:#b95a50}
+.quiz-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:18px}
+button{
+    background:#b52e2e;
+    color:#fff0df;
+    border:0;
+    padding:10px 18px;
+    cursor:pointer;
+    font-weight:bold;
+    border-radius:3px;
+    transition:background .15s ease,transform .15s ease;
+}
+button:hover{background:#8f2424;transform:translateY(-1px)}
+button.secondary{background:#263b55;color:#e5dcc9}
+button.secondary:hover{background:#304966}
+#result{margin-top:0;font-weight:bold;color:#e0b849}
+footer{
+    text-align:center;
+    padding:20px;
+    color:#8f8b82;
+    font-size:13px;
+    background:#0a121f;
+    border-top:1px solid #263b57;
+}
+@media(max-width:650px){
+    header{padding-left:5%;padding-right:5%}
+    header:after{right:-22px;top:54px;font-size:34px}
+    main{width:90%}
+    .formula{font-size:18px}
+}
+
+/* refreshed visual system */
+:root{--bg:#0b1320;--panel:#142238;--panel2:#172b45;--line:#2e4764;--gold:#e1bd50;--red:#c74444;--text:#eee8da;--muted:#aaa99f}
+body{background:radial-gradient(circle at 15% 0%,rgba(67,108,151,.16),transparent 32%),radial-gradient(circle at 85% 10%,rgba(194,68,68,.08),transparent 28%),var(--bg)}
+header{background:linear-gradient(115deg,#173b68,#142b4a 62%,#203b5a);border-bottom:1px solid rgba(225,189,80,.55);padding:34px 8% 30px}
+header:after{content:"";position:absolute;right:5%;top:14px;width:170px;height:170px;border:1px solid rgba(225,189,80,.13);border-radius:50%;box-shadow:0 0 0 24px rgba(225,189,80,.025),0 0 0 48px rgba(225,189,80,.018)}
+header:before{content:"";position:absolute;left:72%;bottom:-70px;width:180px;height:180px;border:1px solid rgba(199,68,68,.14);border-radius:50%}
+.topic-tag{border-color:rgba(225,189,80,.4);background:rgba(8,16,28,.2)}
+.gold-line{height:2px;width:120px;background:var(--gold);margin:12px 0 16px;position:relative}.gold-line:after{content:"";position:absolute;right:-7px;top:-3px;width:8px;height:8px;background:var(--red);transform:rotate(45deg)}
+h2{color:var(--gold);border-bottom:1px solid rgba(199,68,68,.65)}
+.topic{background:linear-gradient(145deg,rgba(23,43,69,.96),rgba(16,31,50,.96));border:1px solid var(--line);border-left:3px solid var(--red);padding:0;margin:18px 0;overflow:hidden;transition:.2s}
+.topic:hover{transform:translateY(-2px);border-color:#476887;box-shadow:0 10px 28px rgba(0,0,0,.22)}
+.topic summary{list-style:none;cursor:pointer;padding:19px 21px;display:flex;align-items:center;gap:13px;font-size:18px;font-weight:700;color:#e6d2a0}
+.topic summary::-webkit-details-marker{display:none}.topic summary:after{content:"+";margin-left:auto;color:var(--gold);font-size:22px;font-weight:400}.topic[open] summary:after{content:"−"}
+.topic summary .mini{width:30px;height:30px;border:1px solid rgba(225,189,80,.35);border-radius:9px;display:grid;place-items:center;color:var(--gold);font-size:13px}
+.topic-body{padding:0 21px 21px}.topic h3{display:none}
+.formula{background:#0c1727;border:1px solid rgba(225,189,80,.42);color:#f1cb58;border-radius:8px;padding:15px;margin:14px 0;font-size:21px;box-shadow:inset 0 0 25px rgba(225,189,80,.025)}
+.formula sub{font-size:.68em;vertical-align:sub}.note{color:#bbb7ab}.application{margin-top:14px;padding:12px 14px;border-left:3px solid var(--gold);background:rgba(225,189,80,.045);color:#d8d3c6;font-size:14px}.application b{color:var(--gold)}
+.illustration{margin:2px 0 14px;padding:10px 12px;border:1px solid #29425e;border-radius:9px;background:rgba(8,17,29,.5);color:#b8c6d2}.illustration svg{display:block;width:100%;height:100px}.illustration-caption{font-size:12px;color:#8f9dab;margin-top:2px;text-align:center}
+table{border:1px solid var(--line);border-radius:8px;overflow:hidden}th{background:#173b68}td,th{padding:11px}td sub{font-size:.72em;vertical-align:sub}
+.quiz{background:linear-gradient(145deg,#14263e,#101e31);border:1px solid #35506c;border-top:3px solid var(--gold);border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.18)}
+label{border:1px solid #29425c;background:rgba(8,17,29,.2);border-radius:8px}label:hover{background:rgba(225,189,80,.06);border-color:#5b7390}
+button{border-radius:8px;background:var(--red)}button.secondary{border:1px solid #3a536e}
+footer{background:#080f19}
+@media(max-width:650px){header:after{right:-55px;top:35px;width:130px;height:130px}.topic summary{padding:17px}.topic-body{padding:0 17px 18px}.formula{font-size:18px}}
+
+/* v4 interaction and quiz polish */
+.hint-button{margin:8px 0 10px;padding:6px 10px;border:1px solid #536b83;background:rgba(8,17,29,.55);color:#d9d4c7;font-size:12px;border-radius:7px;cursor:pointer}.hint-button:hover{border-color:var(--gold);color:var(--gold)}
+.hint-text{display:none;margin:0 0 12px;padding:9px 11px;border-left:2px solid #536b83;background:rgba(83,107,131,.08);color:#bfc9d2;font-size:13px}.hint-text.show{display:block}
+.feedback{min-height:18px}.feedback.correct-msg{color:#d8c15d}.feedback.incorrect-msg{color:#c9bfc0}
+.confetti-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999}.confetti-piece{position:absolute;top:-14px;width:8px;height:13px;opacity:0;animation:confetti-fall 1200ms ease-out forwards}@keyframes confetti-fall{0%{transform:translate3d(0,-10px,0) rotate(0deg);opacity:1}100%{transform:translate3d(var(--dx),105vh,0) rotate(var(--rot));opacity:0}}
+@media(max-width:650px){.hint-button{width:auto}.illustration svg{height:108px}}
+</style>
+</head>
+<body>
+<header>
+<span class="topic-tag">Physics Term 1</span>
+<h1>Accuracy, Precision, Scalar &amp; Vector</h1><div class="gold-line"></div>
+<p>Mikaila Bautista | 12 - Cramer</p>
+</header>
+<main>
+<div class="intro"><p>Accuracy and precision describe measurements, while scalars and vectors describe physical quantities.</p></div>
+<h2>Formulas and Concepts</h2>
+<details class="topic" open=""><summary><span class="mini">01</span>Accuracy</summary><div class="topic-body"><div class="illustration"><svg aria-label="Accuracy visual guide" viewbox="0 0 320 110"><circle cx="70" cy="55" fill="none" opacity=".4" r="36" stroke="currentColor" stroke-width="2"></circle><circle cx="70" cy="55" fill="none" opacity=".5" r="23" stroke="currentColor" stroke-width="2"></circle><circle cx="70" cy="55" fill="currentColor" r="7"></circle><circle cx="70" cy="55" fill="#d0a637" r="3"></circle><circle cx="70" cy="55" fill="none" r="4" stroke="#b52e2e" stroke-width="2"></circle><text fill="currentColor" font-size="15" x="125" y="50">close to the target</text><text fill="currentColor" font-size="12" opacity=".65" x="125" y="72">accuracy = closeness to accepted value</text></svg><div class="illustration-caption">Visual guide · Accuracy</div></div><p>Accuracy tells how close a measured value is to an accepted or expected value.</p><div class="formula">Relative Error = |Measured − Expected| / Expected × 100%</div><div class="application"><b>Real-life application: </b>A thermometer reading close to the actual room temperature is accurate.</div><p class="note"><strong>When to use: </strong>Use when comparing a measurement with an accepted or expected value.</p></div></details><details class="topic"><summary><span class="mini">02</span>Precision</summary><div class="topic-body"><div class="illustration"><svg aria-label="Precision visual guide" viewbox="0 0 320 110"><line opacity=".25" stroke="currentColor" stroke-width="2" x1="35" x2="105" y1="55" y2="55"></line><circle cx="72" cy="55" fill="#d0a637" r="5"></circle><circle cx="76" cy="51" fill="currentColor" r="4"></circle><circle cx="74" cy="58" fill="currentColor" r="4"></circle><circle cx="79" cy="55" fill="currentColor" r="4"></circle><text fill="currentColor" font-size="15" x="125" y="50">measurements cluster</text><text fill="currentColor" font-size="12" opacity=".65" x="125" y="72">precision = consistency of repeats</text></svg><div class="illustration-caption">Visual guide · Precision</div></div><p>Precision tells how closely repeated measurements agree with one another.</p><div class="formula">Relative Uncertainty = Uncertainty / Measured Quantity × 100%</div><div class="application"><b>Real-life application: </b>A digital scale that gives nearly the same reading every time shows high precision.</div><p class="note"><strong>When to use: </strong>Use when judging how consistent repeated measurements are.</p></div></details><details class="topic"><summary><span class="mini">03</span>Scalar</summary><div class="topic-body"><div class="illustration"><svg aria-label="Scalar visual guide" viewbox="0 0 320 110"><rect fill="currentColor" height="38" opacity=".18" rx="7" stroke="currentColor" stroke-width="2" width="64" x="38" y="36"></rect><text fill="currentColor" font-size="16" x="54" y="60">25 m/s</text><text fill="currentColor" font-size="15" x="125" y="50">magnitude only</text><text fill="currentColor" font-size="12" opacity=".65" x="125" y="72">no direction is attached</text></svg><div class="illustration-caption">Visual guide · Scalar</div></div><p>A scalar has magnitude only and has no direction.</p><div class="formula">Examples: mass, time, distance, speed, temperature, energy</div><div class="application"><b>Real-life application: </b>A car dashboard speedometer gives speed, a scalar, because direction is not included.</div><p class="note"><strong>When to use: </strong>Use when the quantity needs magnitude only, with no direction.</p></div></details><details class="topic"><summary><span class="mini">04</span>Vector</summary><div class="topic-body"><div class="illustration"><svg aria-label="Vector visual guide" viewbox="0 0 320 110"><circle cx="55" cy="70" fill="#b52e2e" r="5"></circle><path d="M55 70 L112 38" stroke="#d0a637" stroke-width="4"></path><path d="M112 38 l-13 1 l7 10" fill="none" stroke="#d0a637" stroke-width="4"></path><text fill="currentColor" font-size="15" x="125" y="50">magnitude + direction</text><text fill="currentColor" font-size="12" opacity=".65" x="125" y="72">arrow direction carries information</text></svg><div class="illustration-caption">Visual guide · Vector</div></div><p>A vector has both magnitude and direction.</p><div class="formula">Examples: displacement, velocity, acceleration, force, momentum</div><div class="application"><b>Real-life application: </b>GPS navigation uses displacement and velocity, which include direction.</div><p class="note"><strong>When to use: </strong>Use when both magnitude and direction matter.</p></div></details><details class="topic"><summary><span class="mini">05</span>Vector Components</summary><div class="topic-body"><div class="illustration"><svg aria-label="Vector components visual guide" viewbox="0 0 320 110"><path d="M42 78 L108 35 L108 78 Z" fill="none" opacity=".7" stroke="currentColor" stroke-width="2"></path><path d="M42 78 L108 35" stroke="#d0a637" stroke-width="4"></path><path d="M42 78 L108 78" stroke="currentColor" stroke-width="3"></path><path d="M108 78 L108 35" stroke="currentColor" stroke-width="3"></path><text fill="currentColor" font-size="12" x="57" y="96">Aₓ</text><text fill="currentColor" font-size="12" x="113" y="60">Aᵧ</text><text fill="currentColor" font-size="15" x="125" y="50">one vector → two components</text></svg><div class="illustration-caption">Visual guide · Vector Components</div></div><p>A vector can be separated into horizontal and vertical components.</p><div class="formula">A<sub>x</sub> = A cos θ    |    A<sub>y</sub> = A sin θ</div><div class="application"><b>Real-life application: </b>A ramp force can be split into horizontal and vertical components to simplify analysis.</div><p class="note"><strong>When to use: </strong>Use when a vector is easier to analyze by splitting it into horizontal and vertical parts.</p></div></details><details class="topic"><summary><span class="mini">06</span>Resultant Vector</summary><div class="topic-body"><div class="illustration"><svg aria-label="Resultant vector visual guide" viewbox="0 0 320 110"><path d="M42 76 L82 76 L82 42" fill="none" stroke="#d0a637" stroke-width="4"></path><path d="M42 76 L82 42" stroke="currentColor" stroke-width="4"></path><path d="M82 42 l-12 3 l8 9" fill="none" stroke="currentColor" stroke-width="4"></path><text fill="currentColor" font-size="15" x="125" y="50">components combine</text><text fill="currentColor" font-size="12" opacity=".65" x="125" y="72">R = net vector</text></svg><div class="illustration-caption">Visual guide · Resultant Vector</div></div><p>The resultant represents the combined effect of vector components.</p><div class="formula">R = √(R<sub>x</sub>² + R<sub>y</sub>²)    |    θ = tan⁻¹(R<sub>y</sub>/R<sub>x</sub>)</div><div class="application"><b>Real-life application: </b>The combined effect of wind and an airplane’s motion can be represented by a resultant vector.</div><p class="note"><strong>When to use: </strong>Use when combining two or more vector components into one net vector.</p></div></details>
+<h2>Variables and SI Units</h2>
+<table><tr><th>Symbol</th><th>Meaning</th><th>SI Unit</th></tr><tr><td>Measured value</td><td>Value obtained from an experiment</td><td>Same unit as quantity</td></tr><tr><td>Expected value</td><td>Accepted/reference value</td><td>Same unit as measured value</td></tr><tr><td>Uncertainty</td><td>Estimated measurement range</td><td>Same unit as quantity</td></tr><tr><td>A</td><td>Vector magnitude</td><td>Depends on quantity</td></tr><tr><td>A<sub>x</sub>, A<sub>y</sub></td><td>x and y components</td><td>Same unit as A</td></tr><tr><td>R</td><td>Resultant magnitude</td><td>Same unit as A</td></tr><tr><td>θ</td><td>Direction angle</td><td>degrees or radians</td></tr></table>
+<section class="quiz">
+<h2>Quick Check</h2>
+<p class="quiz-intro">Three questions. Use the hints if you get stuck.</p>
+<div class="question" data-answer="3"><div class="question-title"><span class="question-number">1</span><strong>1. Which quantity must include direction to be fully specified?</strong></div><button class="hint-button" onclick="toggleHint(this)" type="button">Show Hint</button><div class="hint-text">Look for the quantity that is incomplete if you leave out its direction.</div><label><input name="q0" type="radio" value="0"/> Mass</label><label><input name="q0" type="radio" value="1"/> Time</label><label><input name="q0" type="radio" value="2"/> Speed</label><label><input name="q0" type="radio" value="3"/> Velocity</label><div class="feedback"></div></div><div class="question" data-answer="1"><div class="question-title"><span class="question-number">2</span><strong>2. Repeated measurements are very close to each other. This mainly indicates high…</strong></div><button class="hint-button" onclick="toggleHint(this)" type="button">Show Hint</button><div class="hint-text">Focus on how close the repeated readings are to one another.</div><label><input name="q1" type="radio" value="0"/> Accuracy</label><label><input name="q1" type="radio" value="1"/> Precision</label><label><input name="q1" type="radio" value="2"/> Magnitude</label><label><input name="q1" type="radio" value="3"/> Displacement</label><div class="feedback"></div></div><div class="question" data-answer="2"><div class="question-title"><span class="question-number">3</span><strong>3. Which quantity is described by magnitude only?</strong></div><button class="hint-button" onclick="toggleHint(this)" type="button">Show Hint</button><div class="hint-text">Ask whether a direction is needed to describe the quantity completely.</div><label><input name="q2" type="radio" value="0"/> Force</label><label><input name="q2" type="radio" value="1"/> Displacement</label><label><input name="q2" type="radio" value="2"/> Speed</label><label><input name="q2" type="radio" value="3"/> Acceleration</label><div class="feedback"></div></div><div class="quiz-actions"><button onclick="checkAnswers()">Check Answers</button><button class="secondary" onclick="resetQuiz()">Reset</button><div id="result"></div></div>
+</section>
+</main>
+<footer>Mikaila Bautista | 12 - Cramer | Physics Term 1</footer>
+<script>
+let lastPerfect=false;
+function toggleHint(button){
+  const hint=button.nextElementSibling;
+  const open=hint.classList.toggle('show');
+  button.textContent=open?'Hide Hint':'Show Hint';
+}
+function checkAnswers(){
+  const questions=document.querySelectorAll('.question');
+  let score=0;
+  questions.forEach((question)=>{
+    const answer=Number(question.dataset.answer);
+    const selected=question.querySelector('input:checked');
+    const feedback=question.querySelector('.feedback');
+    question.classList.remove('correct','incorrect');
+    feedback.classList.remove('correct-msg','incorrect-msg');
+    if(selected && Number(selected.value)===answer){
+      score++;
+      question.classList.add('correct');
+      feedback.classList.add('correct-msg');
+      feedback.textContent='Correct.';
+    }else if(selected){
+      question.classList.add('incorrect');
+      feedback.classList.add('incorrect-msg');
+      feedback.textContent='Not quite. Try the hint or review the topic.';
+    }else{
+      question.classList.add('incorrect');
+      feedback.classList.add('incorrect-msg');
+      feedback.textContent='Choose an answer first.';
+    }
+  });
+  const total=questions.length;
+  const result=document.getElementById('result');
+  const message=score===total?' Perfect score!':score>=2?' Nice work.':score===1?' Keep reviewing.':' Review the topics and try again.';
+  result.textContent='Score: '+score+' / '+total+' ·'+message;
+  if(score===total && !lastPerfect){launchConfetti(); lastPerfect=true;}
+  if(score!==total){lastPerfect=false;}
+}
+function resetQuiz(){
+  document.querySelectorAll('.question').forEach(q=>{
+    q.classList.remove('correct','incorrect');
+    q.querySelectorAll('input').forEach(input=>input.checked=false);
+    q.querySelector('.feedback').textContent='';
+    q.querySelector('.feedback').classList.remove('correct-msg','incorrect-msg');
+    const hint=q.querySelector('.hint-text');
+    const btn=q.querySelector('.hint-button');
+    if(hint){hint.classList.remove('show'); btn.textContent='Show Hint';}
+  });
+  document.getElementById('result').textContent='';
+  lastPerfect=false;
+}
+function launchConfetti(){
+  const layer=document.createElement('div');
+  layer.className='confetti-layer';
+  for(let i=0;i<70;i++){
+    const piece=document.createElement('span');
+    piece.className='confetti-piece';
+    piece.style.left=(Math.random()*100)+'vw';
+    piece.style.setProperty('--dx',((Math.random()-.5)*260)+'px');
+    piece.style.setProperty('--rot',((Math.random()-.5)*720)+'deg');
+    piece.style.animationDelay=(Math.random()*220)+'ms';
+    piece.style.background=['#d0a637','#b52e2e','#6d8baa','#d7d0c2'][i%4];
+    layer.appendChild(piece);
+  }
+  document.body.appendChild(layer);
+  setTimeout(()=>layer.remove(),1700);
+}
+</script>
+</body>
+</html>
